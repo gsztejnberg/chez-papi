@@ -172,11 +172,17 @@ function renderDashboard() {
   const devisEnv  = appData.filter(e => e['Statut traitement'] === 'Devis envoyé');
   const caConf    = confirmes.reduce((s, e) => s + (parseFloat(e['Budget estimé (€)']) || 0), 0);
 
+  const nouveaux = appData.filter(e => e['Statut traitement'] === 'Nouveau');
+
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
   set('kpi-ca-val',          formatEuro(caConf));
   set('kpi-confirmes-val',   confirmes.length || '—');
   set('kpi-confirmes-delta', devisEnv.length + ' en cours de devis');
   set('kpi-devis-val',       devisEnv.length || '—');
+  set('kpi-leads-val',       nouveaux.length || '—');
+
+  const badge = document.getElementById('topbar-badge');
+  if (badge) badge.textContent = appData.length ? appData.length + ' événement' + (appData.length > 1 ? 's' : '') : '';
 
   // Prochains événements
   const today   = new Date().toISOString().split('T')[0];
